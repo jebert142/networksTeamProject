@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.*;
+import java.net.*;
 
 public class project1 {
 
@@ -11,8 +14,6 @@ public class project1 {
 		System.out.print("[5] Host current users \n");
 		System.out.print("[6] Host running processes \n");
 		System.out.print("[7] Quit \n");
-		//test
-	
 
 	}
 

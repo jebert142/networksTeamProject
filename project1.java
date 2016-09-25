@@ -5,7 +5,13 @@ import java.net.*;
 public class project1 {
 
 	public static void main(String[] args) {
-	 
+		//Default host Name
+		String host = "192.168.100.115";
+		if(args.length!= 0 && args[0] != null){
+			host = args[0];
+		}
+		
+	   //Dispays menu
 		System.out.print("Menu \n");
 		System.out.print("[1] Host current Time and Date \n");
 		System.out.print("[2] Host uptime \n");
@@ -14,7 +20,7 @@ public class project1 {
 		System.out.print("[5] Host current users \n");
 		System.out.print("[6] Host running processes \n");
 		System.out.print("[7] Quit \n");
-
+		
 	}
 
 }

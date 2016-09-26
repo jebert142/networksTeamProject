@@ -1,9 +1,14 @@
+/*Group 8, William Perley, Joey, John, Houston
+  Server Side of Project 1. 
+ */
 import java.io.*;
 import java.net.*;
 
 public class project1server {
-	
+	//Port Number
 	int portNum = 1943
+			
+			
 
 }
 

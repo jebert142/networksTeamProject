@@ -19,8 +19,14 @@ public class project1 {
 		Socket inputSocket = new Socket(host, portNum);
 
 		if(inputSocket != null){
-			PrintWriter write = new PrintWriter(inputSocket.getOutputStream());
-			BufferedReader = new BufferedReader ()
+			try (PrintWriter output = new PrintWriter(inputSocket.getOutputStream());
+					BufferedReader input = new BufferedReader (inputSocket.getInputStream());
+					){
+				BufferedReader userFeed = new BufferedReader( new StreamReader(System.in));
+				String serverOutput;
+				String userOutput;
+				
+			}
 		}
 	}
 

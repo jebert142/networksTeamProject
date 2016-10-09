@@ -1,4 +1,4 @@
-/*William Perley, John, Joey, Houston
+/*William Perley, Jon Ebert, Joey Theobald, Houston Bori
  * Client side of the program used to connect to the server side. When connected
  * to the server side, will be able to put in options 1-7 in order to get different 
  * responses back from the server.

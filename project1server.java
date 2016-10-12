@@ -44,6 +44,27 @@ class serverThread extends Thread
 		this.socket  = socket;
 	}
 
+	public static String result(String instr)
+	{
+		String info = "";
+		//Trying to set up buffers and make sure there are no errors. 
+		try
+		{
+			Process pro = Runtime.getRuntime().exec(instr);
+			BufferedReader instrInput = new BufferedReader(new InputStreamReader(pro.getInputStream()));
+			String x = null;
+			do
+			{
+				info += "\n" + x;
+			} while((x = instrInput.readLine()) != null));
+		}
+		catch (IOException e)
+		{
+			info = "There is an error";
+		}
+		return result;
+	}
+
 
 	public void runServer
 	{
@@ -89,7 +110,7 @@ class serverThread extends Thread
 		switch(num)
 		{
 		case 1:
-			serverRespose = result("date");
+			serverRespose = result ("date");
 			break;
 		case 2:
 			serverRespose = result ("uptime");
@@ -101,7 +122,7 @@ class serverThread extends Thread
 			serverRespose = result ("netstat");
 			break;
 		case 5:
-			serverRespose = result("who");
+			serverRespose = result ("who");
 			break;
 		case 6:
 			serverRespose = result ("ps aux");
@@ -111,8 +132,10 @@ class serverThread extends Thread
 			break;
 		default:
 			serverRespose = "Not a valid option. Please try again."
-			
+
 		}
 
 	}
+
+
 }

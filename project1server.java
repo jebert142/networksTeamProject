@@ -7,16 +7,16 @@ import java.net.*;
 public class project1server 
 {
 	//Start the Server side and check to make sure everything is correct
-	public class runServer
+	public static void main(String[] args)
 	{
 		//Port Number
-		int portNum = 1943
+		int portNum = 1943;
 				System.out.println("Server side started");
-		try(SeverSocket socket = new ServerSocket(portNum));
+		try(ServerSocket socket = new ServerSocket(portNum))
 				{
 					while(true)
 					{
-						new serverThread (ServerSocket.accept()).start();
+						new serverThread (socket.accept()).start();
 					}
 				}
 				catch (IOException e)
@@ -25,13 +25,6 @@ public class project1server
 					System.exit(-1);
 		}
 	}
-	public static void main(String[] args)
-	{
-		//Runs the program on the server
-		new project1server().runServer();
-	}
-
-
 }
 
 //To create an instance
@@ -56,17 +49,17 @@ class serverThread extends Thread
 			do
 			{
 				info += "\n" + x;
-			} while((x = instrInput.readLine()) != null));
+			} while((x = instrInput.readLine()) != null);
 		}
 		catch (IOException e)
 		{
 			info = "There is an error";
 		}
-		return result;
+		return info;
 	}
 
 
-	public void runServer
+	public void runServer()
 	{
 		//Input/output variables
 		PrintWriter output;
@@ -78,15 +71,15 @@ class serverThread extends Thread
 		//Tries to set up an input output stream so the server anc client and write to each other
 		try
 		{
-			out = new PrintWriter(socket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			output = new PrintWriter(socket.getOutputStream(), true);
+			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			System.out.println("Connected on port" + socket.getPort());
 			while(true)
 			{
 				//Display menu and what client should do
-				out.println(options);
-				out.println("Select an option 1-6 or 7 to Exit");
-				inputString = in.readLine();
+				output.println(options);
+				output.println("Select an option 1-6 or 7 to Exit");
+				inputString = input.readLine();
 				output.println(response(inputString));
 				if (Integer.parseInt(inputString) == 7)
 				{
@@ -110,30 +103,31 @@ class serverThread extends Thread
 		switch(num)
 		{
 		case 1:
-			serverRespose = result ("date");
+			serverResponse = result ("date");
 			break;
 		case 2:
-			serverRespose = result ("uptime");
+			serverResponse = result ("uptime");
 			break;
 		case 3:
-			serverRespose = result ("free -m");
+			serverResponse = result ("free -m");
 			break;
 		case 4:
-			serverRespose = result ("netstat");
+			serverResponse = result ("netstat");
 			break;
 		case 5:
-			serverRespose = result ("who");
+			serverResponse = result ("who");
 			break;
 		case 6:
-			serverRespose = result ("ps aux");
+			serverResponse = result ("ps aux");
 			break;
 		case 7:
-			serverRespose = "Exit";
+			serverResponse = "Exit";
 			break;
 		default:
-			serverRespose = "Not a valid option. Please try again."
+			serverResponse = "Not a valid option. Please try again.";
 
 		}
+      return serverResponse;
 
 	}
 

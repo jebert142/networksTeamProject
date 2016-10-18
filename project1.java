@@ -9,12 +9,13 @@ import java.net.*;
 public class project1 
 {
 
-	public class run 
-	{
+   public static void main(String[] args) throws IOException 
+		{ 
+			
 		//Default host Name
 		String host = "192.168.100.115";
 		//Makes sure there was an input in the command line
-		if(args.length!= 0 && args[0] != null)
+		if (args.length != 0 && args[0] != null)
 		{
 			host = args[0];
 
@@ -25,7 +26,7 @@ public class project1
 			return;
 		}
 		//Port number
-		int portNum 1943;
+		int portNum = 1943;
 		//Used to connect to the server
 		Socket inputSocket = new Socket(host, portNum);
 		//Attempting to connect to the server
@@ -33,19 +34,19 @@ public class project1
 		{		
 			//Checking the inputs and reading the socket to try and connect
 			try (PrintWriter output = new PrintWriter(inputSocket.getOutputStream());
-					BufferedReader input = new BufferedReader (inputSocket.getInputStream());)
+					BufferedReader input = new BufferedReader(new InputStreamReader (inputSocket.getInputStream()));)
 			{
 				//If connection is successful, will set up a way to communicate
-				BufferedReader userFeed = new BufferedReader( new StreamReader(System.in));
+				BufferedReader userFeed = new BufferedReader( new InputStreamReader(System.in));
 				//Server side response variables
 				String serverOutput;
 				String userOutput;
 				//Will keep reading inputs as long as the user puts in an input
-				while ((serverOutput = in.readLine()) != null)
+				while ((serverOutput = input.readLine()) != null)
 				{
 					System.out.println(serverOutput);
 					//Lets user know server is done and can select an option to manipulate the program
-					if(severOutput.equals("Please select an option"))
+					if(serverOutput.equals("Please select an option"))
 					{
 						userOutput = userFeed.readLine();
 						if (userOutput != null)
@@ -65,16 +66,9 @@ public class project1
 			//Incase the user does not put in the correct input
 			catch (IOException e)
 			{
-				System.err.println(e.toString()));
+				System.err.println(e.toString());
 			}
 		}
 		
 	}
-		//Starts the program
-		public static void main(String[] args throws IOException) 
-		{ 
-			new project1().run();
-		}
-	
-
 }

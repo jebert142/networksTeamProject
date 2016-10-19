@@ -35,7 +35,7 @@ public class IterServer
 	public static void careForClient(Socket socket)
 	{
 		String options = "Menu\n0 [1] Host current Time and Date\n1 [2] Host uptime\n3 [3] Host Memory use\n4 "
-				+ "[4] Host Netstat\n5 [5] Host current users\n6 [6] Host running processes\n7 [7]Quit\n8";
+				+ "[4] Host Netstat\n5 [5] Host current users\n6 [6] Host running processes\n7 [7]Quit\n";
 		BufferedReader input;
 		PrintWriter output;
 		String inputString;
@@ -112,7 +112,7 @@ public class IterServer
 			serverResponse = result ("ps aux");
 			break;
 		case 7:
-			serverResponse = "Exit";
+			serverResponse = "Quit";
 			break;
 		default:
 			serverResponse = "Not a valid option. Please try again.";

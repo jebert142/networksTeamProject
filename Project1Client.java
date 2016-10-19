@@ -153,7 +153,6 @@ public class Project1Client {
 				SmallThread[] thread = new SmallThread[multiClients];
 				for (int x = 0; x < multiClients; x++)
 				{
-       
 					thread[x] = new SmallThread(new Socket(host, port));
 				}
 				for(int x = 0; x < multiClients; x++)
@@ -201,8 +200,7 @@ class SmallThread extends Thread
 	{
 		try
 		{
-		
-    	serviceThreads(this.inSocket); 
+			serviceThreads(this.inSocket);
 		}
 		catch(Exception e)
 		{
@@ -215,24 +213,18 @@ class SmallThread extends Thread
    long endTime;
 		if(cSocket != null)
 		{
-   
 			try
 			(
 					PrintWriter output = new PrintWriter(cSocket.getOutputStream(), true);
 					BufferedReader input = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
 					)
 			{
-      
 				String serverOutput;
 				startTime = System.currentTimeMillis();
 				while(!cSocket.isClosed())
 				{
-        System.out.println("servThr");
-        serverOutput = input.readLine();
-        System.out.println("test " + serverOutput);
 					if((serverOutput = input.readLine()) != null)
 					{
-           System.out.println("testSmall");
 						if (serverOutput.equals("Select an option 1-6 or 7 to Exit"))
 						{
 							output.println("1");
@@ -302,7 +294,6 @@ class LargeThread extends Thread
 					BufferedReader input = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
 					)
 			{
-    //  System.out.println("testLarge");
 				String serverOutput;
 				startTime = System.currentTimeMillis();
 				while(!cSocket.isClosed())

@@ -26,7 +26,7 @@ public class IterServer
 		}
 		catch(IOException e)
 		{
-			System.err.println("Error connecting to port" + portNum);
+			System.err.println("Error connecting to port " + portNum);
 			System.exit(-1);
 		}
 	}

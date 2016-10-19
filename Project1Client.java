@@ -19,7 +19,7 @@ public class Project1Client {
 		switch(status)
 		{
 		case 1:
-			giveToServer(new Socket(host, 1943));
+			giveToServer(new Socket(host, 1945));
 			break;
 		default:
 			manyClients();

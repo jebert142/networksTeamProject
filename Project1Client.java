@@ -16,10 +16,12 @@ public class Project1Client {
 	//main to take care of inputs and if there are multiple clients
 	public static void main(String[] args) throws IOException {
 		inputArguments(args);
-		switch(status)
+	//	System.out.println(status);
+    switch(status)
 		{
-		case 1:
-			giveToServer(new Socket(host, 1945));
+		case 0:
+			giveToServer(new Socket(host, 1943));
+    //  System.out.println("check check");
 			break;
 		default:
 			manyClients();
@@ -33,24 +35,30 @@ public class Project1Client {
 		{
 			if(args.length == 3)
 			{	//used for date/time
-				if(Integer.parseInt(args[1]) == 2)
+				if(Integer.parseInt(args[1]) == 1)
+				{
+					status = 1;
+				}//used for Netstat
+				else if(Integer.parseInt(args[1]) == 2)
 				{
 					status = 2;
-				}//used for Netstat
-				else if(Integer.parseInt(args[1]) == 3)
-				{
-					status = 3;
 				}
 				multiClients = Integer.parseInt(args[2]);
 			}
+      else
+      {
+      status = 0;
+      }
 		}
 		host = getHost(args);
 	}
 	//Used for functions and single client
 	public static void giveToServer(Socket cSocket) throws IOException
 	{
+ //System.out.println("check check");
 		if(cSocket != null)
 		{
+     //System.out.println("check2 check2");
 			//Trying to setup input/output stream
 			try
 			(
@@ -67,7 +75,7 @@ public class Project1Client {
 				{
 					if((serverOutput = input.readLine()) != null)
 					{
-						if(serverOutput.equals("Please select an option"))
+						if(serverOutput.equals("Select an option 1-6 or 7 to Exit"))
 						{
 							userOutput = userData.readLine();
 							if(userOutput != null)
@@ -110,7 +118,7 @@ public class Project1Client {
 		}
 		else 
 		{
-			System.out.println("Chose 1 for defaut host");
+			System.out.println("Choose 1 for defaut host");
 			BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 			try
 			{
@@ -138,14 +146,15 @@ public class Project1Client {
 	{
 		switch (status)
 		{
-		case 2:
+		case 1:
 			try
 			{
-				System.out.println("ID, Time \n");
+				System.out.println("Time \n");
 				SmallThread[] thread = new SmallThread[multiClients];
 				for (int x = 0; x < multiClients; x++)
 				{
-					thread[x] = new SmallThread(new Socket(host,port), x);
+       
+					thread[x] = new SmallThread(new Socket(host, port));
 				}
 				for(int x = 0; x < multiClients; x++)
 				{
@@ -156,14 +165,14 @@ public class Project1Client {
 			{
 			}
 			break;
-		case 3:
+		case 2:
 			try
 			{
-				System.out.println("ID, Time \n");
+				System.out.println("Time \n");
 				LargeThread[] thread = new LargeThread[multiClients];
 				for (int x = 0; x < multiClients; x++)
 				{
-					thread[x] = new LargeThread(new Socket(host,port), x);
+					thread[x] = new LargeThread(new Socket(host, port));
 				}
 				for(int x = 0; x < multiClients; x++)
 				{
@@ -182,18 +191,18 @@ public class Project1Client {
 class SmallThread extends Thread
 {
 	private Socket inSocket = null;
-	private static int id;
-	SmallThread(Socket client, int id)
+	SmallThread(Socket client)
 	{
 		this.inSocket = client;
-		this.id = id;
+
 	}
 	@Override
 	public void run()
 	{
 		try
 		{
-			serviceThreads(this.inSocket);
+		
+    	serviceThreads(this.inSocket); 
 		}
 		catch(Exception e)
 		{
@@ -202,37 +211,44 @@ class SmallThread extends Thread
 	}
 	public static void serviceThreads(Socket cSocket) throws IOException
 	{
+   long startTime;
+   long endTime;
 		if(cSocket != null)
 		{
+   
 			try
 			(
 					PrintWriter output = new PrintWriter(cSocket.getOutputStream(), true);
 					BufferedReader input = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
 					)
 			{
+      
 				String serverOutput;
-				Sample samp;
-				samp = new Sample(System.currentTimeMillis());
+				startTime = System.currentTimeMillis();
 				while(!cSocket.isClosed())
 				{
+        System.out.println("servThr");
+        serverOutput = input.readLine();
+        System.out.println("test " + serverOutput);
 					if((serverOutput = input.readLine()) != null)
 					{
-						if (serverOutput.equals("Please select an option"))
+           System.out.println("testSmall");
+						if (serverOutput.equals("Select an option 1-6 or 7 to Exit"))
 						{
 							output.println("1");
 							do
 							{
 								if((serverOutput = input.readLine()) != null)
 								{
-									if(serverOutput.equals("Please select an option"))
+									if(serverOutput.equals("Select an option 1-6 or 7 to Exit"))
 									{
-										samp.endingTime = System.currentTimeMillis();
+										endTime = System.currentTimeMillis();
 										output.println("7");
 										while(true)
 										{
 											if(serverOutput.equals("Quit"))
 											{
-												Sample.timeResult(id, samp);
+	                      System.out.println(endTime - startTime);
 												return;
 											}
 										}
@@ -256,11 +272,9 @@ class LargeThread extends Thread
 {
 	//creates threads
 	private Socket inSocket = null;
-	private static int id;
-	LargeThread(Socket client, int id)
+	LargeThread(Socket client)
 	{
 		this.inSocket = client;
-		this.id = id;
 	}
 	@Override
 	public void run()
@@ -277,6 +291,8 @@ class LargeThread extends Thread
 	//To take care of each thread
 	public static void serviceThreads(Socket cSocket) throws IOException
 	{
+   long startTime;
+   long endTime;
 		if(cSocket != null)
 		{
 			try
@@ -286,29 +302,29 @@ class LargeThread extends Thread
 					BufferedReader input = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
 					)
 			{
+    //  System.out.println("testLarge");
 				String serverOutput;
-				Sample samp;
-				samp = new Sample(System.currentTimeMillis());
+				startTime = System.currentTimeMillis();
 				while(!cSocket.isClosed())
 				{
 					if((serverOutput = input.readLine()) != null)
 					{
-						if (serverOutput.equals("Please select an option"))
+						if (serverOutput.equals("Select an option 1-6 or 7 to Exit"))
 						{
 							output.println("4");
 							do
 							{
 								if((serverOutput = input.readLine()) != null)
 								{
-									if(serverOutput.equals("Please select an option"))
+									if(serverOutput.equals("Select an option 1-6 or 7 to Exit"))
 									{
-										samp.endingTime = System.currentTimeMillis();
+										endTime = System.currentTimeMillis();
 										output.println("7");
 										while(true)
 										{
 											if(serverOutput.equals("Quit"))
 											{
-												Sample.timeResult(id, samp);
+												System.out.println(endTime - startTime);
 												return;
 											}
 										}
@@ -325,28 +341,5 @@ class LargeThread extends Thread
 			}
 		}
 		cSocket.close();
-	}
-}
-//Used to log info for the running time of each.
-class Sample
-{
-	public long startingTime;
-	public long endingTime;
-	Sample(long startTimer)
-	{
-		this.startingTime = startTimer;
-	}
-	public void endTime(long endTimer)
-	{
-		this.endingTime = endTimer;
-	}
-	public String toString()
-	{
-		return Long.toString(endingTime - startingTime);
-	}
-
-	public static void timeResult(int id, Sample time) throws IOException
-	{
-		System.out.println(id+ "," + time.toString()+ "\n");
 	}
 }

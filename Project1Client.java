@@ -1,3 +1,9 @@
+/*William Perley, Jon Ebert, Joey Theobald, Houston Bori
+ * Client side of the program used to connect to the server side. When connected
+ * to the server side, will be able to put in options 1-7 in order to get different 
+ * responses back from the server. When starting, will have option to directly connect 
+ * to server, if any other key is pressed, will exit immediately
+ */
 import java.io.*;
 import java.net.*;
 
@@ -6,8 +12,8 @@ public class Project1Client {
 	protected static int port;
 	protected static int multiClients;
 	protected static int status;
-	protected static String host;
-
+	public static String host;
+//main to take care of inputs and if there are multiple clients
 	public static void main(String[] args) throws IOException {
 		inputArguments(args);
 		switch(status)
@@ -20,38 +26,43 @@ public class Project1Client {
 			break;
 		}
 	}
-	public static void inputArguments(String[] input)
+	//Used to treat the arguments
+	public static void inputArguments(String[] args)
 	{
-		if(input.length > 0)
+		if(args.length > 0)
 		{
-			if(input.length == 3)
+			if(args.length == 3)
 			{
-				if(Integer.parseInt(input[1]) == 2)
+				if(Integer.parseInt(args[1]) == 2)
 				{
 					status = 2;
 				}
-				else if(Integer.parseInt(input[1]) == 3)
+				else if(Integer.parseInt(args[1]) == 3)
 				{
-					status = 2;
+					status = 3;
 				}
-				multiClients = Integer.parseInt(input[2]);
+				multiClients = Integer.parseInt(args[2]);
 			}
 		}
-		host = getHost(input);
+		host = getHost(args);
 	}
+	//Used for functions.
 	public static void giveToServer(Socket cSocket) throws IOException
 	{
 		if(cSocket != null)
 		{
+			//Trying to setup input/output stream
 			try
 			(
 					PrintWriter output = new PrintWriter(cSocket.getOutputStream(), true);
 					BufferedReader input = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
 					)
-			{
+			{	//Will only reach this point if input/output stream is successful
 				BufferedReader userData = new BufferedReader(new InputStreamReader(System.in));
 				String userOutput;
 				String serverOutput;
+				//Loop to keep user in the menu options until Exit is selected which
+				//will cause the program to terminate
 				do
 				{
 					if((serverOutput = input.readLine()) != null)
@@ -64,7 +75,8 @@ public class Project1Client {
 								output.println(userOutput);
 							}
 						}
-						else if(serverOutput.equals("Exit"))
+						//Will break the loop if the user selects Exit option
+						else if(serverOutput.equals("Quit"))
 						{
 							System.out.println("Program Terminated");
 							break;
@@ -76,29 +88,50 @@ public class Project1Client {
 							}
 						}
 					}
-				}while(!cSocket.isClosed());
+				}while(!cSocket.isClosed()); //closing socket
 			}
 			catch(IOException e)
 			{
 				System.err.println("Error " +e.toString());
 			}
 		}
+		//Ending the program
 		System.out.println("Session Terminated");
 		cSocket.close();
 	}
+	
 	public static String getHost(String[] arg)
 	{
-		//String host = "192.168.100.115";
+		String host = "192.168.100.115";
 		port = 1943;
 		if(arg.length > 0)
 		{
 			return arg[0];
 		}
-		else
+		else 
 		{
-			System.out.println("No arguments entered \n Good-bye");
-			return null;
+			System.out.println("Chose 1 for defaut host");
+			BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+			try
+			{
+				int test = Integer.parseInt(input.readLine());
+				switch(test)
+				{
+				case 1:
+					System.out.println("Connecting to " + host);
+					return host;
+				default:
+					System.out.println("Error. Terminating Program");
+					System.exit(-1);
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println("Error");
+				System.exit(-1);
+			}
 		}
+		return null;
 	}
 	public static void manyClients()
 	{
@@ -108,10 +141,28 @@ public class Project1Client {
 			try
 			{
 				System.out.println("ID, Time \n");
-				multiThread[] thread = new multiThread[multiClients];
+				SmallThread[] thread = new SmallThread[multiClients];
 				for (int x = 0; x < multiClients; x++)
 				{
-					thread[x] = new multiThread(new Socket(host,port), x);
+					thread[x] = new SmallThread(new Socket(host,port), x);
+				}
+				for(int x = 0; x < multiClients; x++)
+				{
+					thread[x].start();
+				}
+			}
+			catch(Exception e)
+			{
+			}
+			break;
+		case 3:
+			try
+			{
+				System.out.println("ID, Time \n");
+				LargeThread[] thread = new LargeThread[multiClients];
+				for (int x = 0; x < multiClients; x++)
+				{
+					thread[x] = new LargeThread(new Socket(host,port), x);
 				}
 				for(int x = 0; x < multiClients; x++)
 				{
@@ -126,11 +177,74 @@ public class Project1Client {
 	}
 
 }
-class multiThread extends Thread
+class SmallThread extends Thread
 {
 	private Socket inSocket = null;
 	private static int id;
-	multiThread(Socket client, int id)
+	SmallThread(Socket client, int id)
+	{
+		this.inSocket = client;
+		this.id = id;
+	}
+	@Override
+	public void run()
+	{
+		try
+		{
+			serviceThreads(this.inSocket);
+		}
+		catch(Exception e)
+		{
+		}
+
+	}
+	public static void serviceThreads(Socket cSocket) throws IOException
+	{
+		if(cSocket != null)
+		{
+			try
+			(
+					PrintWriter output = new PrintWriter(cSocket.getOutputStream(), true);
+					BufferedReader input = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
+					)
+			{
+				String serverOutput;
+				Sample samp;
+				samp = new Sample(System.currentTimeMillis());
+				while(!cSocket.isClosed())
+				{
+					if((serverOutput = input.readLine()) != null)
+					{
+						if (serverOutput.equals("Please select an option"))
+						{
+							samp.endingTime = System.currentTimeMillis();
+							output.println("7");
+							do
+							{
+								if(serverOutput.equals("Exit"))
+								{
+									Sample.timeResult(id, samp);
+									return;
+								}
+							}while(true);
+						}
+					}
+				}
+			}
+			catch (IOException e)
+			{
+				System.err.println(e.toString());
+			}
+		}
+		cSocket.close();
+	}
+}
+
+class LargeThread extends Thread
+{
+	private Socket inSocket = null;
+	private static int id;
+	LargeThread(Socket client, int id)
 	{
 		this.inSocket = client;
 		this.id = id;

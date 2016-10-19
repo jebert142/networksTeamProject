@@ -58,8 +58,8 @@ class serverThread extends Thread
 		return info;
 	}
 
-
-	public void runServer()
+   @Override
+	public void run()
 	{
 		//Input/output variables
 		PrintWriter output;

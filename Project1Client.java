@@ -227,6 +227,7 @@ class SmallThread extends Thread
 					{
 						if (serverOutput.equals("Select an option 1-6 or 7 to Exit"))
 						{
+               
 							output.println("1");
 							do
 							{
@@ -234,16 +235,23 @@ class SmallThread extends Thread
 								{
 									if(serverOutput.equals("Select an option 1-6 or 7 to Exit"))
 									{
+                    
 										endTime = System.currentTimeMillis();
 										output.println("7");
-										while(true)
-										{
-											if(serverOutput.equals("Quit"))
-											{
-	                      System.out.println(endTime - startTime);
-												return;
-											}
-										}
+                    System.out.println("Response time ");
+                    System.out.println(endTime - startTime);
+                    return;
+										//while(true)
+										//{
+                      
+										//	if(serverOutput.equals("Quit"))
+										//	{
+                     //   System.out.println("Small Quit");
+	                    //  System.out.println(endTime - startTime);
+											//	return;
+										//	}
+                    //  System.out.println("While True");
+									//	}
 									}
 								}
 							}while(true);
@@ -311,14 +319,19 @@ class LargeThread extends Thread
 									{
 										endTime = System.currentTimeMillis();
 										output.println("7");
-										while(true)
-										{
-											if(serverOutput.equals("Quit"))
-											{
-												System.out.println(endTime - startTime);
-												return;
-											}
-										}
+                    System.out.println("Response time ");
+                    System.out.println(endTime- startTime);
+                    return;
+									//	while(true)
+										//{
+                      //System.out.println("While True");
+											//if(serverOutput.equals("Quit"))
+											//{
+                       //  System.out.println("Quit");
+												//System.out.println(endTime - startTime);
+												//return;
+											//}
+										//}
 									}
 								}
 							}while(true);

@@ -48,8 +48,8 @@ public class IterServer
 			output.println("Connection Established");
 			do
 			{
+        output.println("Select an option 1-6 or 7 to Exit");      
 				output.println(options);
-				output.println("Select an option 1-6 or 7 to Exit");
 				inputString = input.readLine();
 				output.println(response(inputString));
 				if (Integer.parseInt(inputString) == 7)
